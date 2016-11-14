@@ -12,6 +12,46 @@
   render from Julia and to provide a base layer on top of which a
   BlenderPlot.jl package could rest.
 
+* Usage example
+  #+BEGIN_SRC julia :results output :exports both
+    using Blender
+
+    Blender.render("examples/simple")
+  #+END_SRC
+
+  #+RESULTS:
+  #+begin_example
+  Fra:1 Mem:15.95M (0.00M, Peak 15.95M) | Time:00:00.00 | Preparing Scene data
+  Fra:1 Mem:15.97M (0.00M, Peak 15.97M) | Time:00:00.00 | Preparing Scene data
+  Fra:1 Mem:15.97M (0.00M, Peak 15.97M) | Time:00:00.00 | Creating Shadowbuffers
+  Fra:1 Mem:15.97M (0.00M, Peak 15.97M) | Time:00:00.00 | Raytree.. preparing
+  Fra:1 Mem:15.97M (0.00M, Peak 15.97M) | Time:00:00.00 | Raytree.. building
+  Fra:1 Mem:15.98M (0.00M, Peak 16.00M) | Time:00:00.00 | Raytree finished
+  Fra:1 Mem:15.98M (0.00M, Peak 16.00M) | Time:00:00.00 | Creating Environment maps
+  Fra:1 Mem:15.98M (0.00M, Peak 16.00M) | Time:00:00.00 | Caching Point Densities
+  Fra:1 Mem:15.98M (0.00M, Peak 16.00M) | Time:00:00.00 | Sce: Scene Ve:8 Fa:6 La:1
+  Fra:1 Mem:15.98M (0.00M, Peak 16.00M) | Time:00:00.00 | Loading voxel datasets
+  Fra:1 Mem:15.98M (0.00M, Peak 16.00M) | Time:00:00.00 | Sce: Scene Ve:8 Fa:6 La:1
+  Fra:1 Mem:15.99M (0.00M, Peak 16.00M) | Time:00:00.00 | Sce: Scene Ve:8 Fa:6 La:1
+  Fra:1 Mem:15.99M (0.00M, Peak 16.00M) | Time:00:00.00 | Volume preprocessing
+  Fra:1 Mem:15.99M (0.00M, Peak 16.00M) | Time:00:00.00 | Sce: Scene Ve:8 Fa:6 La:1
+  Fra:1 Mem:15.99M (0.00M, Peak 16.00M) | Time:00:00.00 | Sce: Scene Ve:8 Fa:6 La:1
+  Fra:1 Mem:19.36M (0.00M, Peak 19.94M) | Time:00:00.01 | Scene, Part 8-135
+  Fra:1 Mem:18.97M (0.00M, Peak 19.94M) | Time:00:00.01 | Scene, Part 1-135
+  .
+  .
+  .
+  Fra:1 Mem:16.61M (0.00M, Peak 20.60M) | Time:00:00.03 | Scene, Part 119-135
+  Fra:1 Mem:16.31M (0.00M, Peak 20.60M) | Time:00:00.03 | Scene, Part 113-135
+  Fra:1 Mem:16.22M (0.00M, Peak 20.60M) | Time:00:00.03 | Scene, Part 102-135
+  Fra:1 Mem:15.75M (0.00M, Peak 20.60M) | Time:00:00.03 | Sce: Scene Ve:8 Fa:6 La:1
+  Saved: 'examples/simple.png'
+   Time: 00:00.10 (Saving: 00:00.06)
+  #+end_example
+
+  [[/examples/simple.png]]
+
+
 * Ideas
   - Make use of [[https://github.com/JuliaGeometry][JuliaGeometry]] family of packages.
     - Blender can be used to load different mesh formats, but it does

@@ -1,5 +1,6 @@
 module Blender
 
-# package code goes here
+include("bpy.jl")
+include("render.jl")
 
 end # module

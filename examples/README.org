@@ -1,0 +1,63 @@
+#+TITLE: Blender.jl usage examples
+* Simple example
+  #+BEGIN_SRC julia
+    using Blender
+
+    Blender.render("simple")
+  #+END_SRC
+
+  #+RESULTS:
+  : PyObject {'FINISHED'}
+
+  [[simple.png]]
+* Using GeometryTypes.jl
+  #+BEGIN_SRC julia :results output :exports both
+    using Blender
+    using GeometryTypes
+    using FileIO
+    using AffineTransforms
+
+    Blender.clear_objects()
+
+    b = load("bunny.obj")
+    trf = tformscale(15.f0,3)*tformrotate([1.f0,0.f0,0.f0], Float32(π)/2)
+    ob = Blender.add(b, "bunny", trf)
+    println(ob)
+
+    Blender.render("bunny")
+  #+END_SRC
+
+  #+RESULTS:
+  #+begin_example
+    PyObject bpy.data.objects['bunny_obj']
+    Fra:1 Mem:16.94M (0.00M, Peak 17.19M) | Time:00:00.00 | Preparing Scene data
+    Fra:1 Mem:16.96M (0.00M, Peak 17.19M) | Time:00:00.00 | Preparing Scene data
+    Fra:1 Mem:16.96M (0.00M, Peak 17.19M) | Time:00:00.00 | Creating Shadowbuffers
+    Fra:1 Mem:16.96M (0.00M, Peak 17.19M) | Time:00:00.00 | Raytree.. preparing
+    Fra:1 Mem:17.64M (0.00M, Peak 17.64M) | Time:00:00.00 | Raytree.. building
+    Fra:1 Mem:17.62M (0.00M, Peak 18.69M) | Time:00:00.00 | Raytree finished
+    Fra:1 Mem:17.62M (0.00M, Peak 18.69M) | Time:00:00.00 | Creating Environment maps
+    Fra:1 Mem:17.62M (0.00M, Peak 18.69M) | Time:00:00.00 | Caching Point Densities
+    Fra:1 Mem:17.62M (0.00M, Peak 18.69M) | Time:00:00.00 | Sce: Scene Ve:2503 Fa:4968 La:1
+    Fra:1 Mem:17.62M (0.00M, Peak 18.69M) | Time:00:00.00 | Loading voxel datasets
+    Fra:1 Mem:17.62M (0.00M, Peak 18.69M) | Time:00:00.00 | Sce: Scene Ve:2503 Fa:4968 La:1
+    Fra:1 Mem:17.62M (0.00M, Peak 18.69M) | Time:00:00.00 | Sce: Scene Ve:2503 Fa:4968 La:1
+    Fra:1 Mem:17.62M (0.00M, Peak 18.69M) | Time:00:00.00 | Volume preprocessing
+    Fra:1 Mem:17.62M (0.00M, Peak 18.69M) | Time:00:00.00 | Sce: Scene Ve:2503 Fa:4968 La:1
+    Fra:1 Mem:17.62M (0.00M, Peak 18.69M) | Time:00:00.00 | Sce: Scene Ve:2503 Fa:4968 La:1
+    Fra:1 Mem:20.53M (0.00M, Peak 21.35M) | Time:00:00.01 | Scene, Part 6-135
+    Fra:1 Mem:21.47M (0.00M, Peak 21.49M) | Time:00:00.01 | Scene, Part 2-135
+    Fra:1 Mem:21.33M (0.00M, Peak 21.49M) | Time:00:00.01 | Scene, Part 4-135
+    .
+    .
+    .
+    Fra:1 Mem:18.16M (0.00M, Peak 23.70M) | Time:00:00.04 | Scene, Part 118-135
+    Fra:1 Mem:17.86M (0.00M, Peak 23.70M) | Time:00:00.04 | Scene, Part 133-135
+    Fra:1 Mem:16.30M (0.00M, Peak 23.70M) | Time:00:00.04 | Sce: Scene Ve:2503 Fa:4968 La:1
+    Saved: 'bunny.png'
+     Time: 00:00.09 (Saving: 00:00.05)
+
+    PyObject {'FINISHED'}
+  #+end_example
+
+  [[bunny.png]]

@@ -1,0 +1,23 @@
+#+TITLE: Blender.jl
+#+AUTHOR: Stefanos Carlström
+#+EMAIL: stefanos.carlstrom@gmail.com
+
+[[https://travis-ci.org/jagot/Blender.jl][https://travis-ci.org/jagot/Blender.jl.svg?branch=master]]
+[[https://coveralls.io/github/jagot/Blender.jl?branch=master][https://coveralls.io/repos/jagot/Blender.jl/badge.svg?branch=master&service=github]]
+[[http://codecov.io/github/jagot/Blender.jl?branch=master][http://codecov.io/github/jagot/Blender.jl/coverage.svg?branch=master]]
+
+* Description
+  Julia interface to [[https://wiki.blender.org/index.php/User%3aIdeasman42/BlenderAsPyModule][Blender-as-a-Python-module]] (easily installable on
+  Archlinux [[https://aur.archlinux.org/packages/blender-as-py-module][via Aur]]). Main point is to be able to programmatically
+  render from Julia and to provide a base layer on top of which a
+  BlenderPlot.jl package could rest.
+
+* Ideas
+  - Make use of [[https://github.com/JuliaGeometry][JuliaGeometry]] family of packages.
+    - Blender can be used to load different mesh formats, but it does
+      not hurt to be able to use [[https://github.com/JuliaIO/MeshIO.jl][MeshIO.jl]] as well.
+  - Easily select rendering engine [Blender standard, Cycles
+    (CPU/GPU), &c.]
+  - Node materials
+    - Should be easily saved/loaded
+    - Open node editor without loading all of Blender?

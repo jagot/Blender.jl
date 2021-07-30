@@ -40,8 +40,9 @@ function add(name::String, vertices, normals, faces; smooth=false)
     object
 end
 
-function add(m::Mesh{3,T}, name,
-             trf::Transformation=IdentityTransformation(); kwargs...) where T
+function add(name::String, m::Mesh{3,T};
+             trf::Transformation=IdentityTransformation(),
+             kwargs...) where T
     verts = map(trf.(decompose(Point3{T}, m))) do v
         v[1],v[2],v[3]
     end

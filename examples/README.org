@@ -24,7 +24,7 @@
     b = load("bunny.obj")
 
     trf = LinearMap(15.f0I) ∘ LinearMap(RotX(Float32(π)/2))
-    ob = Blender.add(b, "bunny", trf)
+    ob = Blender.add("bunny", b, trf)
     println(ob)
 
     camera = Blender.context.scene.camera

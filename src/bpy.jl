@@ -23,3 +23,5 @@ function __init__()
     copy!(render_ops, bpy.ops.render)
     copy!(render_context, context.scene.render)
 end
+
+save(filename::AbstractString) = bpy.ops.wm.save_mainfile(filepath=filename)

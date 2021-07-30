@@ -8,9 +8,11 @@
 
 * Description
   Julia interface to [[https://wiki.blender.org/index.php/User%3aIdeasman42/BlenderAsPyModule][Blender-as-a-Python-module]] (easily installable on
-  Archlinux [[https://aur.archlinux.org/packages/blender-as-py-module][via Aur]]). Main point is to be able to programmatically
-  render from Julia and to provide a base layer on top of which a
-  BlenderPlot.jl package could rest.
+  Archlinux [[https://aur.archlinux.org/packages/blender-as-py-module][via Aur]]; note that you typically would have to change your
+  Python vendor to the system-wide installation, see [[https://github.com/JuliaPy/PyCall.jl#specifying-the-python-version][here for
+  details]]). Main point is to be able to programmatically render from
+  Julia and to provide a base layer on top of which a BlenderPlot.jl
+  package could rest.
 
 * Usage example
   #+BEGIN_SRC julia :results output :exports both

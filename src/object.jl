@@ -13,8 +13,14 @@ function clear_objects()
     end
 end
 
-function add(m::Mesh{3,T}, name,
-             trf::Transformation=IdentityTransformation()) where T
+# https://blender.stackexchange.com/a/91687
+function smooth!(ob)
+    for f in ob.data.polygons
+        f.use_smooth = true
+    end
+end
+
+function add(name::String, vertices, normals, faces; smooth=false)
     mesh = data.meshes.new("$(name)_mesh")
     object = data.objects.new("$(name)_obj", mesh)
 
@@ -23,6 +29,19 @@ function add(m::Mesh{3,T}, name,
     context.view_layer.objects.active = object
     # object.select = true
 
+    facesm1 = map(f -> f .- 1, faces)
+
+    mesh.from_pydata(vertices,
+                     [],
+                     facesm1)
+    mesh.update()
+
+    smooth && smooth!(object)
+    object
+end
+
+function add(m::Mesh{3,T}, name,
+             trf::Transformation=IdentityTransformation(); kwargs...) where T
     verts = map(trf.(decompose(Point3{T}, m))) do v
         v[1],v[2],v[3]
     end
@@ -32,16 +51,9 @@ function add(m::Mesh{3,T}, name,
         n[1],n[2],n[3]
     end
 
-    # Should be able to use GLTriangleFace, instead of subtracting 1
-    # manually.
     faces = map(decompose(TriangleFace{UInt32}, m)) do f
-        f[1]-1,f[2]-1,f[3]-1
+        f[1],f[2],f[3]
     end
 
-    mesh.from_pydata(verts,
-                       [],
-                       faces)
-    mesh.update()
-
-    object
+    add(name, verts, norms, faces; kwargs...)
 end

@@ -3,3 +3,4 @@
 *.jl.mem
 .juliahistory
 *~
+Manifest.toml

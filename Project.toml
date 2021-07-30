@@ -1,0 +1,18 @@
+name = "Blender"
+uuid = "23209721-9dbd-4dbe-9e9c-a3c9cb8a177c"
+authors = ["Stefanos Carlström <stefanos.carlstrom@gmail.com> and contributors"]
+version = "0.1.0"
+
+[deps]
+CoordinateTransformations = "150eb455-5306-5404-9cee-2592286d6298"
+GeometryBasics = "5c1252a2-5f33-56bf-86c9-59e7332b4326"
+PyCall = "438e738f-606a-5dbb-bf0a-cddfbfd45ab0"
+
+[compat]
+julia = "1.6"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]

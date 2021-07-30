@@ -10,19 +10,25 @@
   : PyObject {'FINISHED'}
 
   [[simple.png]]
-* Using GeometryTypes.jl
+* Using MeshIO.jl
   #+BEGIN_SRC julia :results output :exports both
     using Blender
-    using GeometryTypes
     using FileIO
-    using AffineTransforms
+    using MeshIO
+    using CoordinateTransformations
+    using LinearAlgebra
+    using Rotations
 
     Blender.clear_objects()
 
     b = load("bunny.obj")
-    trf = tformscale(15.f0,3)*tformrotate([1.f0,0.f0,0.f0], Float32(π)/2)
+
+    trf = LinearMap(15.f0I) ∘ LinearMap(RotX(Float32(π)/2))
     ob = Blender.add(b, "bunny", trf)
     println(ob)
+
+    camera = Blender.context.scene.camera
+    camera.location.z = 6.5
 
     Blender.render("bunny")
   #+END_SRC

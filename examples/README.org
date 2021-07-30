@@ -30,7 +30,7 @@
     camera = Blender.context.scene.camera
     camera.location.z = 6.5
 
-    Blender.render("bunny")
+    Blender.render("bunny", transparent=true)
   #+END_SRC
 
   #+RESULTS:

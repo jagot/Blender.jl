@@ -59,6 +59,13 @@ function add_object!(name::String, m::Mesh{3,T};
     add_object!(name, verts, norms, faces; kwargs...)
 end
 
+function add_object!(name::String, p::GeometryBasics.GeometryPrimitive;
+                     nvertices=24, kwargs...)
+    m = Mesh(collect(coordinates(p, nvertices)),
+             collect(faces(p, nvertices)))
+    add_object!(name, m; kwargs...)
+end
+
 setcolor!(o, c::Colorant) =
     o.color = (red(c), green(c), blue(c), alpha(c))
 

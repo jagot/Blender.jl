@@ -9,6 +9,7 @@ GeometryBasics = "5c1252a2-5f33-56bf-86c9-59e7332b4326"
 PyCall = "438e738f-606a-5dbb-bf0a-cddfbfd45ab0"
 
 [compat]
+GeometryBasics = "0.4"
 julia = "1.6"
 
 [extras]

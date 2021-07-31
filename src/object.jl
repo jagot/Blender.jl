@@ -2,7 +2,7 @@ using GeometryBasics
 using CoordinateTransformations
 
 # Clear all objects in the scene and delete all meshes
-function clear_objects()
+function clear_objects!()
     length(data.meshes) == 0 && return
     object_ops.mode_set(mode="OBJECT")
     object_ops.select_by_type(; :type => "MESH")
@@ -20,7 +20,7 @@ function smooth!(ob)
     end
 end
 
-function add(name::String, vertices, normals, faces; smooth=false)
+function add_object!(name::String, vertices, normals, faces; smooth=false)
     mesh = data.meshes.new("$(name)_mesh")
     object = data.objects.new("$(name)_obj", mesh)
 
@@ -40,9 +40,9 @@ function add(name::String, vertices, normals, faces; smooth=false)
     object
 end
 
-function add(name::String, m::Mesh{3,T};
-             trf::Transformation=IdentityTransformation(),
-             kwargs...) where T
+function add_object!(name::String, m::Mesh{3,T};
+                     trf::Transformation=IdentityTransformation(),
+                     kwargs...) where T
     verts = map(trf.(decompose(Point3{T}, m))) do v
         v[1],v[2],v[3]
     end
@@ -56,5 +56,8 @@ function add(name::String, m::Mesh{3,T};
         f[1],f[2],f[3]
     end
 
-    add(name, verts, norms, faces; kwargs...)
+    add_object!(name, verts, norms, faces; kwargs...)
 end
+
+
+export clear_objects!, smooth!, add_object!

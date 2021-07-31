@@ -19,12 +19,12 @@
     using LinearAlgebra
     using Rotations
 
-    Blender.clear_objects()
+    clear_objects!()
 
     b = load("bunny.obj")
 
     trf = LinearMap(15.f0I) ∘ LinearMap(RotX(Float32(π)/2))
-    ob = Blender.add("bunny", b, trf)
+    ob = add_object!("bunny", b, trf)
     println(ob)
 
     camera = Blender.context.scene.camera

@@ -67,3 +67,140 @@
   #+end_example
 
   [[bunny.png]]
+
+* Colors & Materials
+  Here we show how to render a function, with colors provided by
+  [[https://github.com/JuliaGraphics/ColorSchemes.jl][ColorSchemes.jl]]:
+
+  #+BEGIN_SRC julia :results output :exports code
+    using Blender
+    using GeometryBasics
+    using ColorSchemes
+
+    function generate_grid(nx, ny, w=5, d=5; magf=(i,j) -> 1)
+        x = range(-w, stop=w, length=nx)
+        y = range(-d, stop=d, length=ny)
+
+        points = Vector{Point3{Float64}}()
+        faces = Vector{NTuple{3,Int}}()
+        magnitudes = Vector{Float64}()
+
+        for (j,x) in enumerate(x)
+            for (i,y) in enumerate(y)
+                m = magf(x,y)
+                push!(magnitudes, m)
+                push!(points, Point3(x, y, m))
+            end
+        end
+
+        # Generate triangulation
+        for j = 1:ny-1
+            for i = 1:nx-1
+                push!(faces, (i + (j-1)*nx,
+                              i + 1 + (j-1)*nx,
+                              i + 1 + j*nx))
+                push!(faces, (i + 1 + j*nx,
+                              i + j*nx,
+                              i + (j-1)*nx))
+            end
+        end
+
+        (mesh=(points, nothing, faces), magnitudes=magnitudes)
+    end
+
+    clear_objects!()
+
+    N = 0.4
+    magf = (x,y) -> N*sinpi(x*cospi(y/2))
+
+    g = generate_grid(300, 300, 3, 3, magf=magf)
+    ob = add_object!("grid", g.mesh..., smooth=true)
+
+    cmap = ColorSchemes.plasma
+
+    # Paint the vertices according to their elevation
+    vertex_colors!(i -> cmap[clamp((g.magnitudes[i]/N .+ 1)/2, 0, 1)], ob)
+
+    camera = Blender.context.scene.camera
+    camera.location.z = 4.5
+  #+END_SRC
+
+  Now we need to map the vertex colors to the material used for
+  rendering, and we will use the node system of Blender, together with
+  some convenience functions of Blender.jl to access the node
+  connectors.
+
+  #+BEGIN_SRC julia :results output :exports both
+    mat = new_material("Paint", use_nodes=true)
+    append_material!(ob, mat)
+
+    bsdf = mat.node_tree.nodes.get("Principled BSDF")
+    sna = mat.node_tree.nodes.new("ShaderNodeAttribute")
+    # To access the vertex colors, we choose this attribute
+    sna.attribute_name="Col"
+
+    # We can now list the inputs/outputs of e.g. the BSDF:
+    connections(bsdf)
+
+    # This is how we link the outputs of the attributde node to the inputs
+    # of the BSDF:
+    mat.node_tree.links.new(find_input(bsdf, "Base Color"),
+                            find_output(sna, "Color"))
+    mat.node_tree.links.new(find_input(bsdf, "Alpha"),
+                            find_output(sna, "Alpha"))
+    set_input!(bsdf, "Subsurface", 0.1)
+    set_input!(bsdf, "Metallic", 0.7)
+
+    Blender.render("grid-function")
+
+    # We can also save the current scene for further use
+    Blender.save("grid-function.blend")
+  #+END_SRC
+
+  #+RESULTS:
+  #+begin_example
+    Node "Principled BSDF"
+    PyObject bpy.data.materials['Paint'].node_tree.nodes["Principled BSDF"]
+      # │ Input                   Output
+    ────┼────────────────────────────────
+      1 │ Base Color              BSDF
+      2 │ Subsurface
+      3 │ Subsurface Radius
+      4 │ Subsurface Color
+      5 │ Metallic
+      6 │ Specular
+      7 │ Specular Tint
+      8 │ Roughness
+      9 │ Anisotropic
+     10 │ Anisotropic Rotation
+     11 │ Sheen
+     12 │ Sheen Tint
+     13 │ Clearcoat
+     14 │ Clearcoat Roughness
+     15 │ IOR
+     16 │ Transmission
+     17 │ Transmission Roughness
+     18 │ Emission
+     19 │ Emission Strength
+     20 │ Alpha
+     21 │ Normal
+     22 │ Clearcoat Normal
+     23 │ Tangent
+
+    Fra:1 Mem:131.64M (Peak 132.31M) | Time:00:00.13 | Syncing Light
+    Fra:1 Mem:131.64M (Peak 132.31M) | Time:00:00.13 | Syncing Camera
+    Fra:1 Mem:131.64M (Peak 132.31M) | Time:00:00.13 | Syncing grid_obj
+    Fra:1 Mem:148.37M (Peak 153.84M) | Time:00:00.23 | Rendering 1 / 64 samples
+    Fra:1 Mem:132.01M (Peak 153.84M) | Time:00:01.71 | Rendering 26 / 64 samples
+    Fra:1 Mem:132.01M (Peak 153.84M) | Time:00:03.06 | Rendering 51 / 64 samples
+    Fra:1 Mem:132.01M (Peak 153.84M) | Time:00:03.77 | Rendering 64 / 64 samples
+    Saved: 'grid-function.png'
+     Time: 00:04.48 (Saving: 00:00.53)
+
+    PyObject {'FINISHED'}
+
+    Info: Saved "grid-function.blend"
+    Info: Saved "grid-function.blend"
+  #+end_example
+
+  [[grid-function.png]]

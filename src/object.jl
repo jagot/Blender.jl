@@ -59,5 +59,28 @@ function add_object!(name::String, m::Mesh{3,T};
     add_object!(name, verts, norms, faces; kwargs...)
 end
 
+setcolor!(o, c::Colorant) =
+    o.color = (red(c), green(c), blue(c), alpha(c))
 
-export clear_objects!, smooth!, add_object!
+function vertex_colors!(fun::Function, ob)
+    # https://blender.stackexchange.com/a/911
+    mesh = ob.data
+    isempty(mesh.vertex_colors) && mesh.vertex_colors.new()
+    cl = mesh.vertex_colors.active
+    for (i,p) in enumerate(mesh.polygons)
+        for (j,vi) in zip(p.loop_indices,p.vertices)
+            setcolor!(cl.data[j+1], fun(vi+1))
+        end
+    end
+end
+
+function append_material!(ob, mat; activate=true)
+    mesh = ob.data
+    mesh.materials.append(mat)
+    if activate
+        ob.active_material_index = length(mesh.materials)-1
+    end
+end
+
+export clear_objects!, smooth!, add_object!,
+    vertex_colors!, append_material!

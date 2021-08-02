@@ -1,5 +1,3 @@
-using PyCall
-
 const bpy = PyNULL()
 
 const context = PyNULL()

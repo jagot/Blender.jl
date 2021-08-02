@@ -1,6 +1,3 @@
-using GeometryBasics
-using CoordinateTransformations
-
 # Clear all objects in the scene and delete all meshes
 function clear_objects!()
     length(data.meshes) == 0 && return
